@@ -1,70 +1,175 @@
-# Redux Fundamentals Tutorial Example
+# Redux 기초
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[리덕스 공식 사이트 예제](https://redux.js.org/tutorials/fundamentals/part-1-overview)를 따라 만들어보며 우리말로 정리해보자.
 
-## Available Scripts
+## 데이터 흐름
 
-In the project directory, you can run:
+**데이터는 한 방향으로 흐른다.**
 
-### `yarn start`
+1. `action` 은 마우스 클릭같은 유저 인터랙션에 의해 `dispatch` 된다.
+2. `store` 는 `reducer` 함수를 실행하고, 새로운 `state` 를 계산한다.
+3. UI 는 새로운 `state` 를 읽고, 새로운 값을 화면에 뿌린다.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+![리덕스 데이터 흐름](https://redux.js.org/assets/images/ReduxDataFlowDiagram-49fa8c3968371d9ef6f2a1486bd40a26.gif)
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+더 단순하게 표현하자면 아래와 같은 그림이다.
 
-### `yarn test`
+- State는 앱의 특정 시간의 상태(스냅샷)라고 말할 수 있다.
+- UI(View)는 state 바탕으로 렌더링 된다.
+- 어떤 행위가 일어나면, 그 행위를 바탕으로 state가 업데이트된다.
+- UI는 새로운 state를 바탕으로 재렌더링 된다.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![한방향 데이터 흐름](https://redux.js.org/assets/images/one-way-data-flow-04fe46332c1ccb3497ecb04b94e55b97.png)
 
-### `yarn build`
+## 불변성
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+"가변성"은 "변화 가능함"을 의미한다. 뭔가가 "불변"한다면, 그건 절대로 변하지 않는다는 뜻이다.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+자바스크립트의 객체와 배열은 기본적으로 가변적이다.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```js
+const obj = { a: 1, b: 2 }
+// 값을 변경할 수 있다.
+obj.b = 3
 
-### `yarn eject`
+const arr = ['a', 'b']
+// 값을 변경할 수 있다.
+arr.push('c')
+arr[1] = 'd'
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+**값을 불변성을 유지한 채 업데이트하려면, 객체/배열을 복사한 후 그 값을 변경하고, 그 값을 적용해야 한다.**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```js
+const obj2 = {
+  ...obj,
+  b: 3
+}
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Redux 전문 용어
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Actions (액션)
 
-## Learn More
+액션은 `type` 값을 가진 자바스크립트 객체다. 애**플리케이션에서 일어나는 이벤트라고 생각해도 된다.** `type` 필드는 보통 `"domain/eventName"` 식으로 작성된다. (`"todos/todoAdded"`)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+액션은 `payload` 라는 값을 추가로 가질 수 있다. 이 값엔 어떤 일이 일어났을 때, 그에 관한 추가적인 정보가 들어간다.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```js
+const addTodoAction = {
+  type: 'todos/todoAdded',
+  payload: 'Buy milk'
+}
+```
 
-### Code Splitting
+### Reducers (리듀서)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+리듀서 함수는 현재 상태와 액션 객체를 매개변수로 받는 함수다. 어떻게 상태가 업데이트돼야 할지를 정의하고, 새로운 상태를 반환한다. `(state, action) => newState`. **리듀서를 액션 type에 따라 이벤트를 핸들링하는 이벤트 리스너라고 생각해도 된다.**
 
-### Analyzing the Bundle Size
+리듀서 함수는 *지켜야만 하는* 몇가지 규칙이 있다.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+- 데이터의 단방향 흐름 : 새로운 상태는 `state`, `action` 을 통해서만 결정된다.
+- 불변성 : `state` 를 변경시켜선 안된다. - 항상 복사본을 통해서만 변경해라.
+- AJAX call이나 비동기 로직같은 "side-effect"가 있어선 안된다.
 
-### Making a Progressive Web App
+```js
+const initialState = { value: 0 }
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+function counterReducer(state = initialState, action) {
+  // Check to see if the reducer cares about this action
+  if (action.type === 'counter/incremented') {
+    // If so, make a copy of `state`
+    return {
+      ...state,
+      // and update the copy with the new value
+      value: state.value + 1
+    }
+  }
+  // otherwise return the existing state unchanged
+  return state
+}
+```
 
-### Advanced Configuration
+#### 👉 'Reducer'라 불리는 이유
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+`Array.reduce` 메서드는 배열을 순회하며, 배열의 아이템 하나마다 어떠한 프로세스를 거쳐 하나의 값으로 만들어준다. "배열을 하나의 값으로 줄인다(reduce)"라고 생각할 수 있다.
 
-### Deployment
+`Array.reduce` 는 콜백 함수를 매개변수로 받는데, 이 함수가 배열의 아이템마다 불려진다. 이 함수는 2개의 매개변수를 받는다.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+- `previousResult`(이전 상태), 직전 콜백 함수가 반환한 값
+- `currentItem`(현재 값), 배열의 현재 아이템
 
-### `yarn build` fails to minify
+처음 콜백함수가 실행되면 "이전 상태"가 없으므로, 추가적으로 첫번째 "이전 상태"로 사용될  초기값을 넘겨줄 수 있다.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+```js
+const numbers = [2, 5, 8]
+
+const addNumbers = (previousResult, currentItem) => {
+  console.log({ previousResult, currentItem })
+  return previousResult + currentItem
+}
+
+const initialValue = 0
+
+const total = numbers.reduce(addNumbers, initialValue)
+// {previousResult: 0, currentItem: 2}
+// {previousResult: 2, currentItem: 5}
+// {previousResult: 7, currentItem: 8}
+
+console.log(total)
+// 15
+```
+
+**리듀서 함수도 위 `addNumbers` 콜백 함수와 같다.** 이전 상태(`state`)와 현재 값(`action` 객체)를 통해 새로운 상태를 반환한다.
+
+```js
+const actions = [
+  { type: 'counter/incremented' },
+  { type: 'counter/incremented' },
+  { type: 'counter/incremented' }
+]
+
+const initialState = { value: 0 }
+
+const finalResult = actions.reduce(counterReducer, initialState)
+console.log(finalResult)
+// {value: 3}
+```
+
+**리듀서는 "일련의 액션들을 하나의 상태로 줄인다(reduce)"** 고 말할 수 있다. 차이점은 `Array.reduce()` 메서드는 한 번에, 리덕스에선 앱의 라이프타임 내내 발생한다는 점이다.
+
+### Store (스토어)
+
+리덕스 애플리케이션은 `store` 라고 불리는 객체 안에서 실행된다. 스토어는 리듀서를 넘겨줘서 생성할 수 있고, `getState` 메서드를 통해 현재 상태값을 가져올 수 있다.
+
+```js
+import { configureStore } from '@reduxjs/toolkit'
+
+const store = configureStore({ reducer: counterReducer })
+
+console.log(store.getState())
+// {value: 0}
+```
+
+### Dispatch (디스패치)
+
+리덕스 스토어는 `dispatch` 라 불리는 메서드를 가지고 있다. **상태를 업데이트하는 유일한 방법은 `stroe.dispatch()` 함수에 액션 객체를 넘겨주는 방법뿐이다. 액션을 디스패치하는걸 "이벤트 발생"이라고 생각할 수 있다.**
+
+```js
+store.dispatch({ type: 'counter/incremented' })
+
+console.log(store.getState())
+// {value: 1}
+```
+
+### Selector (셀렉터)
+
+셀렉터는 스토어 상태값에서 특정 정보를 추출할 수 있는 함수다. 애플리케이션이 비대해지면, 같은 데이터를 불러오는 곳에서 셀렉터를 사용해 반복되는 로직을 제거할 수 있다.
+
+```js
+const selectCounterValue = state => state.value
+
+const currentValue = selectCounterValue(store.getState())
+console.log(currentValue)
+// 2
+```
