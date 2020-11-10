@@ -8,10 +8,7 @@ export default function filtersReducer(state = initialState, action) {
     case 'filters/statusFilterChanged': {
       return {
         ...state,
-        filters: {
-          ...state.filters,
-          status: action.payload,
-        },
+        status: action.payload,
       }
     }
     default:
