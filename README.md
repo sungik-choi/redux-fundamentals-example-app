@@ -2,6 +2,9 @@
 
 [리덕스 공식 사이트 예제](https://redux.js.org/tutorials/fundamentals/part-1-overview)를 따라 만들어보며 우리말로 정리해보자.
 
+- [Redux 스토어 구현](./reduxStore.md)
+- [Redux 미들웨어 구현](./middleware.md)
+
 ## 데이터 흐름
 
 **데이터는 한 방향으로 흐른다.**
