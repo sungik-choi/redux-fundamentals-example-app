@@ -29,7 +29,7 @@ function exampleMiddleware(storeAPI) {
 }
 ```
 
-- `exampleMiddleware` : 가장 바깥의 함수로, 미들웨어 그 자체이다. `applyMiddleware`에 의해 호출되고, 스토어의 `{dispatch, getState}` 함수를 가진 `storeAPI` 객체를 받는다. store의 해당 함수와 같다. `dispatch` 함수를 호출하면, 액션을 첫번째 미들웨어 파이프라인으로 보낸다. 한번만 실행된다.
+- `exampleMiddleware` : 가장 바깥의 함수로, 미들웨어 그 자체이다. `applyMiddleware`에 의해 호출되고, 스토어의 `{ dispatch, getState }` 함수를 가진 `storeAPI` 객체를 받는다. store의 해당 함수와 같다. `dispatch` 함수를 호출하면, 액션을 첫번째 미들웨어 파이프라인으로 보낸다. 한번만 실행된다.
 - `wrapDispatch` : 가운데 함수는 매개변수로 `next` 라 불리는 함수를 받는다.이 함수는 파이프라인의 *다음 미들웨어*이다. 만약 마지막 미들웨어라면, `next` 는 `store.dispatch` 함수가 된다. `next(action)` 을 호출하면 미들웨어에게 파이프라인의 다음 미들웨어를 넘겨준다. 한번만 실행된다.
 - `handleAction` : 내부 함수는 현재 `action` 을 매개변수로 받는다. 액션이 디스패치될 때마다 매번 호출된다.
 
