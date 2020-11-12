@@ -3,11 +3,11 @@
 [리덕스 공식 사이트 예제](https://redux.js.org/tutorials/fundamentals/part-1-overview)를 따라 만들어보며 우리말로 정리해보자.
 
 1. Redux 기초: 현재 문서
-2. [Redux 스토어 구현](./reduxStore.md)
-3. [Redux 미들웨어 구현](./middleware.md)
-4. [React와 함께 쓰기](./useWithReact.md)
-5. [비동기](./async.md)
-6. [일반적인 Redux 패턴](./standard-redux-patterns.md)
+2. [Redux 스토어 구현](./markdown/2-redux-store.md)
+3. [Redux 미들웨어 구현](./markdown/3-middleware.md)
+4. [React와 함께 쓰기](./markdown/4-use-with-react.md)
+5. [비동기](./markdown/5-async.md)
+6. [일반적인 Redux 패턴](./markdown/6-standard-redux-patterns.md)
 
 ## 데이터 흐름
 
