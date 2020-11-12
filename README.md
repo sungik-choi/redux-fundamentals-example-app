@@ -8,6 +8,7 @@
 4. [React와 함께 쓰기](./markdown/4-use-with-react.md)
 5. [비동기](./markdown/5-async.md)
 6. [일반적인 Redux 패턴](./markdown/6-standard-redux-patterns.md)
+7. [모던 리덕스 with Redux Toolkit](./markdown/7-modern-redux.md)
 
 ## 데이터 흐름
 
