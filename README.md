@@ -6,6 +6,8 @@
 2. [Redux 스토어 구현](./reduxStore.md)
 3. [Redux 미들웨어 구현](./middleware.md)
 4. [React와 함께 쓰기](./useWithReact.md)
+5. [비동기](./async.md)
+6. [일반적인 Redux 패턴](./standard-redux-patterns.md)
 
 ## 데이터 흐름
 
